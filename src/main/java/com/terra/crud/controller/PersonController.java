@@ -76,4 +76,12 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
+	@GetMapping(value = "/findByRangeAge")
+	public ResponseEntity<List<PersonEntity>> findByPartFullName(@RequestParam("start") final Integer start,
+			@RequestParam("end") final Integer end) {
+		List<PersonEntity> response = personService.findByRangeAge(start, end);
+
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
 }

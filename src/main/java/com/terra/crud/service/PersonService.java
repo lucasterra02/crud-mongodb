@@ -1,11 +1,13 @@
 package com.terra.crud.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.terra.crud.entity.AddressEntity;
 import com.terra.crud.entity.PersonEntity;
 import com.terra.crud.entity.filter.PersonEntityFilter;
 import com.terra.crud.entity.response.PersonResponsePaged;
@@ -19,9 +21,20 @@ public class PersonService {
 	private PersonRepository personRepository;
 
 	@Autowired
+	private AddressService addressService;
+
+	@Autowired
 	private PersonDynamicRepository personDynamicRepository;
 
 	public PersonEntity salvar(PersonEntity person) {
+
+		List<AddressEntity> addresses = new ArrayList<>();
+
+		person.getAddresses().forEach(address -> {
+			addresses.add(addressService.findById(address.getId()));
+		});
+
+		person.setAddresses(addresses);
 
 		return personRepository.save(person);
 
@@ -32,7 +45,8 @@ public class PersonService {
 	}
 
 	public PersonEntity findById(String id) {
-		return personRepository.findById(id).get();
+
+		return personRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Pessoa não existe."));
 	}
 
 	public PersonEntity update(String id, PersonEntity person) {
@@ -60,6 +74,10 @@ public class PersonService {
 
 	public PersonResponsePaged findByFilter(PersonEntityFilter filter) {
 		return personDynamicRepository.findByFilterAndPagination(filter);
+	}
+
+	public List<PersonEntity> findByRangeAge(Integer start, Integer end) {
+		return personRepository.findByRangeAge(start, end);
 	}
 
 }

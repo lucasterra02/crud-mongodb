@@ -15,5 +15,10 @@ public class AddressService {
 	public AddressEntity salvar(AddressEntity address) {
 		return addressRepository.save(address);
 	}
+	
+	public AddressEntity findById(String id) {
+
+		return addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Pessoa não existe."));
+	}
 
 }

@@ -31,6 +31,8 @@ public class PersonEntity {
 
 	private Integer documentId;
 
+	private Integer age;
+
 	@DBRef
 	@Field("address")
 	private List<AddressEntity> addresses = new ArrayList<>();
