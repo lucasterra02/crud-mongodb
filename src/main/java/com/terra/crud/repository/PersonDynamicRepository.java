@@ -32,8 +32,8 @@ public class PersonDynamicRepository {
 
 		addRestrictions(filter, patientsDynamicQuery);
 
-		List<PersonEntity> filteredPatients = mongoOperations.find(patientsDynamicQuery, PersonEntity.class);
-		Page<PersonEntity> personEntityPage = PageableExecutionUtils.getPage(filteredPatients, pageable,
+		List<PersonEntity> filteredPersons = mongoOperations.find(patientsDynamicQuery, PersonEntity.class);
+		Page<PersonEntity> personEntityPage = PageableExecutionUtils.getPage(filteredPersons, pageable,
 				() -> mongoOperations.count(patientsDynamicQuery.limit(-1).skip(-1), PersonEntity.class));
 
 		return PersonResponsePaged.builder().numberOfElements(personEntityPage.getNumberOfElements())
@@ -43,21 +43,21 @@ public class PersonDynamicRepository {
 
 	}
 
-	private void addRestrictions(PersonEntityFilter filter, Query patientsDynamicQuery) {
+	private void addRestrictions(PersonEntityFilter filter, Query personDynamicQuery) {
 
 		if (Objects.nonNull(filter.getFullName())) {
 			Criteria criteria = Criteria.where("fullName").regex(".*" + filter.getFullName() + ".*", "i");
-			patientsDynamicQuery.addCriteria(criteria);
+			personDynamicQuery.addCriteria(criteria);
 		}
 
 		if (Objects.nonNull(filter.getPhone())) {
 			Criteria criteria = Criteria.where("phone").regex(filter.getPhone());
-			patientsDynamicQuery.addCriteria(criteria);
+			personDynamicQuery.addCriteria(criteria);
 		}
 
 		if (Objects.nonNull(filter.getDocumentId())) {
 			Criteria criteria = Criteria.where("documentId").regex(filter.getPhone());
-			patientsDynamicQuery.addCriteria(criteria);
+			personDynamicQuery.addCriteria(criteria);
 		}
 	}
 	
