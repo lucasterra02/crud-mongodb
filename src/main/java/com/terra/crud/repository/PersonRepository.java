@@ -10,8 +10,7 @@ import com.terra.crud.entity.PersonEntity;
 
 @Repository
 public interface PersonRepository extends MongoRepository<PersonEntity, String> {
-
+	
 	@Query("{ $and: [ { 'age': { $gte: ?0 } }, { 'age': {$lte: ?1 } } ] }")
 	public List<PersonEntity> findByRangeAge(Integer start, Integer end);
-
 }
